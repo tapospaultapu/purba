@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>মাটি ও মৃৎশিল্প ইনভয়েজ</title>
+  <style>
+    body {
+      font-family: 'SolaimanLipi', sans-serif;
+      background: linear-gradient(to bottom, #fff8f0, #f1e6d6);
+      padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      text-align: center;
+      color: #5c4033;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    select,
+    input,
+    button,
+    textarea,
+    label {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+    }
+    input, select, textarea {
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #5c4033;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #7a523e;
+    }
+    textarea {
+      height: 180px;
+      resize: vertical;
+    }
+    .summary {
+      background: #f7f3ef;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 6px;
+    }
+    .footer-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .date {
+      text-align: right;
+      font-size: 14px;
+      color: #777;
+    }
+    .totals {
+      background: #eee9e2;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+    .totals p {
+      margin: 6px 0;
+      font-weight: bold;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .container, .container * {
+        visibility: visible;
+      }
+      .footer-buttons,
+      #invoiceText,
+      #productSelect,
+      label[for="deliveryCharge"],
+      #deliveryCharge,
+      button,
+      .date {
+        display: none !important;
+      }
+      .container {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+  </style>
+
+  <!-- PDF লাইব্রেরি -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+  <div class="container" id="invoiceContainer">
+    <h1>মাটি ও মৃৎশিল্প ইনভয়েজ</h1>
+    <div class="date">
+      তারিখ: <span id="currentDate"></span>
+    </div>
+
+    <select id="productSelect" onchange="addProduct()">
+      <option value="">-- পণ্য সিলেক্ট করুন --</option>
+      <option value="380">বড় তরকারি পাতিল (ঢাকনা সহ) - ৩৮০ টাকা</option>
+      <option value="330">বড় তরকারি পাতিল (ঢাকনা ছাড়া) - ৩৩০ টাকা</option>
+      <option value="370">বড় কড়াই (ঢাকনা সহ) - ৩৭০ টাকা</option>
+      <option value="320">বড় কড়াই (ঢাকনা ছাড়া) - ৩২০ টাকা</option>
+      <option value="270">ছোট কড়াই (ঢাকনা সহ) - ২৭০ টাকা</option>
+      <option value="220">ছোট কড়াই (ঢাকনা ছাড়া) - ২২০ টাকা</option>
+      <option value="370">বড় ভাতের পাতিল (ঢাকনা সহ) - ৩৭০ টাকা</option>
+      <option value="320">বড় ভাতের পাতিল (ঢাকনা ছাড়া) - ৩২০ টাকা</option>
+      <option value="320">মাঝারি ভাতের পাতিল (ঢাকনা সহ) - ৩২০ টাকা</option>
+      <option value="270">মাঝারি ভাতের পাতিল (ঢাকনা ছাড়া) - ২৭০ টাকা</option>
+      <option value="270">ছোট ভাতের পাতিল (ঢাকনা সহ) - ২৭০ টাকা</option>
+      <option value="220">ছোট ভাতের পাতিল (ঢাকনা ছাড়া) - ২২০ টাকা</option>
+      <option value="250">চায়ের পাতিল (ঢাকনা সহ / ছাড়া) - ২৫০ টাকা</option>
+      <option value="330">দুধ/ডাল পাতিল (ঢাকনা সহ) - ৩৩০ টাকা</option>
+      <option value="280">দুধ/ডাল পাতিল (ঢাকনা ছাড়া) - ২৮০ টাকা</option>
+      <option value="370">স্টিমার / পিঠা ভাপে সেদ্ধ করার পাতিল (ঢাকনা সহ) - ৩৭০ টাকা</option>
+      <option value="320">স্টিমার / পিঠা ভাপে সেদ্ধ করার পাতিল (ঢাকনা ছাড়া) - ৩২০ টাকা</option>
+      <option value="370">ভাপা পিঠার পাতিল (ঢাকনা সহ) - ৩৭০ টাকা</option>
+      <option value="420">ভাপা পিঠার পাতিল (পিঠার বাটি সহ) - ৪২০ টাকা</option>
+      <option value="220">চিতই পিঠার খোলা (ঢাকনা সহ) - ২২০ টাকা</option>
+      <option value="270">খোলজা পিঠার খোলা (ঢাকনা সহ) - ২৭০ টাকা</option>
+      <option value="370">৭ খোপের চিতই পিঠার ছাঁচ (ঢাকনা সহ) - ৩৭০ টাকা</option>
+      <option value="320">খোপের চিতই পিঠার ছাঁচ (ঢাকনা সহ) - ৩২০ টাকা</option>
+      <option value="250">তাওয়া - ২৫০ টাকা</option>
+      <option value="110">জলকান্দা (পাতিল বসানোর পাত্র) - ১১০ টাকা</option>
+      <option value="250">কয়েলদানি - ২৫০ টাকা</option>
+      <option value="1200">১৪ লিটার কলসি (ট্যাপ, ঢাকনা ও জলকান্দা সহ) - ১২০০ টাকা</option>
+      <option value="850">৭ লিটার কলসি (ট্যাপ, ঢাকনা ও জলকান্দা সহ) - ৮৫০ টাকা</option>
+      <option value="750">৫ লিটার কলসি (ট্যাপ, ঢাকনা ও জলকান্দা সহ) - ৭৫০ টাকা</option>
+    </select>
+
+    <div id="selectedItems" class="summary"></div>
+
+    <div class="totals">
+      <p>মোট পণ্যের মূল্য: <span id="productTotal">৳ ০</span></p>
+    </div>
+
+    <label for="deliveryCharge">ডেলিভারি চার্জ</label>
+    <input type="number" id="deliveryCharge" placeholder="ডেলিভারি চার্জ (৳)" />
+
+    <button onclick="submitInvoice()">Submit</button>
+    <button onclick="clearAll()">Clear</button>
+
+    <div class="totals" id="finalSummary" style="display: none;">
+      <p>পণ্যের মূল্য: <span id="invoiceProductTotal">৳ ০</span></p>
+      <p>ডেলিভারি চার্জ: <span id="invoiceDelivery">৳ ০</span></p>
+      <p>সর্বমোট মূল্য: <span id="invoiceTotal">৳ ০</span></p>
+    </div>
+
+    <textarea id="invoiceText" readonly></textarea>
+
+    <div class="footer-buttons">
+      <button onclick="copyText()">Copy Text</button>
+      <button onclick="downloadPDF()">PDF ডাউনলোড</button>
+      <button onclick="submitAndPrint()">প্রিন্ট</button>
+    </div>
+  </div>
+
+  <script>
+    const selectedItems = [];
+
+    function updateDate() {
+      const today = new Date();
+      const formatted = today.toLocaleDateString("bn-BD", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      document.getElementById("currentDate").textContent = formatted;
+    }
+
+    function addProduct() {
+      const select = document.getElementById("productSelect");
+      const price = parseInt(select.value);
+      if (!price) return;
+      const text = select.options[select.selectedIndex].text;
+      selectedItems.push({ text, price });
+      renderItems();
+      select.selectedIndex = 0;
+    }
+
+    function renderItems() {
+      const container = document.getElementById("selectedItems");
+      let html = "<ul>";
+      let total = 0;
+      selectedItems.forEach((item) => {
+        html += `<li>${item.text}</li>`;
+        total += item.price;
+      });
+      html += "</ul>";
+      container.innerHTML = html;
+      document.getElementById("productTotal").innerText = `৳ ${total}`;
+    }
+
+    function submitInvoice() {
+      const delivery = parseInt(document.getElementById("deliveryCharge").value) || 0;
+      const productTotal = selectedItems.reduce((sum, item) => sum + item.price, 0);
+      const total = productTotal + delivery;
+      const today = document.getElementById("currentDate").textContent;
+
+      let text = `ইনভয়েজ তারিখ: ${today}\nপণ্যের বিবরণ:\n`;
+      selectedItems.forEach((item) => {
+        text += `- ${item.text}\n`;
+      });
+      text += `\nপণ্যের মূল্য: ৳${productTotal}\n`;
+      text += `ডেলিভারি চার্জ: ৳${delivery}\n`;
+      text += `সর্বমোট মূল্য: ৳${total}`;
+
+      document.getElementById("invoiceText").value = text;
+
+      document.getElementById("invoiceProductTotal").innerText = `৳ ${productTotal}`;
+      document.getElementById("invoiceDelivery").innerText = `৳ ${delivery}`;
+      document.getElementById("invoiceTotal").innerText = `৳ ${total}`;
+      document.getElementById("finalSummary").style.display = "block";
+    }
+
+    function submitAndPrint() {
+      submitInvoice();
+      setTimeout(() => {
+        window.print();
+      }, 200);
+    }
+
+    function copyText() {
+      const textarea = document.getElementById("invoiceText");
+      textarea.select();
+      document.execCommand("copy");
+      alert("কপি করা হয়েছে");
+    }
+
+    function downloadPDF() {
+      submitInvoice(); // Ensure data is fresh
+      const element = document.querySelector(".container");
+
+      const opt = {
+        margin: 0.5,
+        filename: 'invoice.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save();
+    }
+
+    function clearAll() {
+      selectedItems.length = 0;
+      document.getElementById("selectedItems").innerHTML = "";
+      document.getElementById("deliveryCharge").value = "";
+      document.getElementById("invoiceText").value = "";
+      document.getElementById("productSelect").selectedIndex = 0;
+      document.getElementById("productTotal").innerText = "৳ ০";
+      document.getElementById("finalSummary").style.display = "none";
+    }
+
+    updateDate();
+  </script>
+</body>
+</html>
