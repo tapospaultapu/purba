@@ -80,6 +80,20 @@
       font-weight: bold;
     }
 
+    .quantity-buttons {
+      display: inline-flex;
+      gap: 4px;
+    }
+
+    .quantity-buttons button {
+      padding: 2px 8px;
+      font-size: 14px;
+      font-weight: bold;
+      background-color: #5c4033;
+      color: white;
+      border-radius: 4px;
+    }
+
     @media print {
       body * {
         visibility: hidden;
@@ -104,7 +118,6 @@
     }
   </style>
 
-  <!-- PDF লাইব্রেরি -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
@@ -116,29 +129,31 @@
 
     <select id="productSelect" onchange="addProduct()">
       <option value="">-- পণ্য সিলেক্ট করুন --</option>
-      <option value="380">বড় তরকারি পাতিল (ঢাকনা সহ) - ৩৮০ টাকা</option>
+      <option value="380">বড় তরকারি পাতিল ঢাকনা সহ - ৩৮০ টাকা</option>
       <option value="330">বড় তরকারি পাতিল (ঢাকনা ছাড়া) - ৩৩০ টাকা</option>
-      <option value="370">বড় কড়াই (ঢাকনা সহ) - ৩৭০ টাকা</option>
+	  <option value="330">ছোট তরকারি পাতিল ঢাকনা সহ - ৩৩০ টাকা</option>
+	  <option value="330">ছোট তরকারি পাতিল (ঢাকনা ছাড়া) - ২৮০ টাকা</option>
+      <option value="370">বড় কড়াই ঢাকনা সহ - ৩৭০ টাকা</option>
       <option value="320">বড় কড়াই (ঢাকনা ছাড়া) - ৩২০ টাকা</option>
-      <option value="270">ছোট কড়াই (ঢাকনা সহ) - ২৭০ টাকা</option>
+      <option value="270">ছোট কড়াই ঢাকনা সহ - ২৭০ টাকা</option>
       <option value="220">ছোট কড়াই (ঢাকনা ছাড়া) - ২২০ টাকা</option>
-      <option value="370">বড় ভাতের পাতিল (ঢাকনা সহ) - ৩৭০ টাকা</option>
+      <option value="370">বড় ভাতের পাতিল ঢাকনা সহ - ৩৭০ টাকা</option>
       <option value="320">বড় ভাতের পাতিল (ঢাকনা ছাড়া) - ৩২০ টাকা</option>
-      <option value="320">মাঝারি ভাতের পাতিল (ঢাকনা সহ) - ৩২০ টাকা</option>
+      <option value="320">মাঝারি ভাতের পাতিল ঢাকনা সহ - ৩২০ টাকা</option>
       <option value="270">মাঝারি ভাতের পাতিল (ঢাকনা ছাড়া) - ২৭০ টাকা</option>
-      <option value="270">ছোট ভাতের পাতিল (ঢাকনা সহ) - ২৭০ টাকা</option>
+      <option value="270">ছোট ভাতের পাতিল ঢাকনা সহ - ২৭০ টাকা</option>
       <option value="220">ছোট ভাতের পাতিল (ঢাকনা ছাড়া) - ২২০ টাকা</option>
-      <option value="250">চায়ের পাতিল (ঢাকনা সহ / ছাড়া) - ২৫০ টাকা</option>
-      <option value="330">দুধ/ডাল পাতিল (ঢাকনা সহ) - ৩৩০ টাকা</option>
+      <option value="250">চায়ের পাতিল ঢাকনা সহ - ২৫০ টাকা</option>
+      <option value="330">দুধ/ডাল পাতিল ঢাকনা সহ - ৩৩০ টাকা</option>
       <option value="280">দুধ/ডাল পাতিল (ঢাকনা ছাড়া) - ২৮০ টাকা</option>
-      <option value="370">স্টিমার / পিঠা ভাপে সেদ্ধ করার পাতিল (ঢাকনা সহ) - ৩৭০ টাকা</option>
+      <option value="370">স্টিমার / পিঠা ভাপে সেদ্ধ করার পাতিল ঢাকনা সহ - ৩৭০ টাকা</option>
       <option value="320">স্টিমার / পিঠা ভাপে সেদ্ধ করার পাতিল (ঢাকনা ছাড়া) - ৩২০ টাকা</option>
-      <option value="370">ভাপা পিঠার পাতিল (ঢাকনা সহ) - ৩৭০ টাকা</option>
-      <option value="420">ভাপা পিঠার পাতিল (পিঠার বাটি সহ) - ৪২০ টাকা</option>
-      <option value="220">চিতই পিঠার খোলা (ঢাকনা সহ) - ২২০ টাকা</option>
-      <option value="270">খোলজা পিঠার খোলা (ঢাকনা সহ) - ২৭০ টাকা</option>
-      <option value="370">৭ খোপের চিতই পিঠার ছাঁচ (ঢাকনা সহ) - ৩৭০ টাকা</option>
-      <option value="320">খোপের চিতই পিঠার ছাঁচ (ঢাকনা সহ) - ৩২০ টাকা</option>
+      <option value="370">ভাপা পিঠার পাতিল ঢাকনা সহ - ৩৭০ টাকা</option>
+      <option value="420">ভাপা পিঠার পাতিল পিঠার বাটি সহ - ৪২০ টাকা</option>
+      <option value="220">চিতই পিঠার খোলা ঢাকনা সহ - ২২০ টাকা</option>
+      <option value="270">খোলজা পিঠার খোলা ঢাকনা সহ - ২৭০ টাকা</option>
+      <option value="370">৭ খোপের চিতই পিঠার ছাঁচ ঢাকনা সহ - ৩৭০ টাকা</option>
+      <option value="320">৫ খোপের চিতই পিঠার ছাঁচ ঢাকনা সহ - ৩২০ টাকা</option>
       <option value="250">তাওয়া - ২৫০ টাকা</option>
       <option value="110">জলকান্দা (পাতিল বসানোর পাত্র) - ১১০ টাকা</option>
       <option value="250">কয়েলদানি - ২৫০ টাকা</option>
@@ -192,19 +207,45 @@
       const price = parseInt(select.value);
       if (!price) return;
       const text = select.options[select.selectedIndex].text;
-      selectedItems.push({ text, price });
+
+      const existingItem = selectedItems.find((item) => item.text === text);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        selectedItems.push({ text, price, quantity: 1 });
+      }
+
       renderItems();
       select.selectedIndex = 0;
     }
 
+    function changeQuantity(index, delta) {
+      const item = selectedItems[index];
+      item.quantity += delta;
+      if (item.quantity <= 0) {
+        selectedItems.splice(index, 1);
+      }
+      renderItems();
+    }
+
     function renderItems() {
       const container = document.getElementById("selectedItems");
-      let html = "<ul>";
+      let html = "<ul style='list-style:none;padding-left:0'>";
       let total = 0;
-      selectedItems.forEach((item) => {
-        html += `<li>${item.text}</li>`;
-        total += item.price;
+
+      selectedItems.forEach((item, index) => {
+        const itemTotal = item.price * item.quantity;
+        html += `
+          <li style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+            <span>${item.text} - ${item.price} টাকা - ${item.quantity} পিস = ৳${itemTotal}</span>
+            <span class="quantity-buttons">
+              <button onclick="changeQuantity(${index}, 1)">＋</button>
+              <button onclick="changeQuantity(${index}, -1)">−</button>
+            </span>
+          </li>`;
+        total += itemTotal;
       });
+
       html += "</ul>";
       container.innerHTML = html;
       document.getElementById("productTotal").innerText = `৳ ${total}`;
@@ -212,20 +253,20 @@
 
     function submitInvoice() {
       const delivery = parseInt(document.getElementById("deliveryCharge").value) || 0;
-      const productTotal = selectedItems.reduce((sum, item) => sum + item.price, 0);
+      const productTotal = selectedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
       const total = productTotal + delivery;
       const today = document.getElementById("currentDate").textContent;
 
       let text = `ইনভয়েজ তারিখ: ${today}\nপণ্যের বিবরণ:\n`;
       selectedItems.forEach((item) => {
-        text += `- ${item.text}\n`;
+        const itemTotal = item.price * item.quantity;
+        text += `- ${item.text} (${item.quantity} পিস) = ৳${itemTotal}\n`;
       });
       text += `\nপণ্যের মূল্য: ৳${productTotal}\n`;
       text += `ডেলিভারি চার্জ: ৳${delivery}\n`;
       text += `সর্বমোট মূল্য: ৳${total}`;
 
       document.getElementById("invoiceText").value = text;
-
       document.getElementById("invoiceProductTotal").innerText = `৳ ${productTotal}`;
       document.getElementById("invoiceDelivery").innerText = `৳ ${delivery}`;
       document.getElementById("invoiceTotal").innerText = `৳ ${total}`;
@@ -247,9 +288,8 @@
     }
 
     function downloadPDF() {
-      submitInvoice(); // Ensure data is fresh
+      submitInvoice();
       const element = document.querySelector(".container");
-
       const opt = {
         margin: 0.5,
         filename: 'invoice.pdf',
@@ -257,7 +297,6 @@
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
-
       html2pdf().set(opt).from(element).save();
     }
 
