@@ -2,35 +2,37 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>মাটি ও মৃৎশিল্প ইনভয়েজ</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap');
 
     :root {
-      --primary-color: #1ABC9C; /* Turquoise */
-      --secondary-color: #2980B9; /* Belize Hole */
-      --accent-color: #27AE60; /* Nephritis */
-      --btn-blue: #3498DB; /* Peter River */
+      --primary-color: #1ABC9C;
+      --secondary-color: #2980B9;
+      --accent-color: #27AE60;
+      --btn-blue: #3498DB;
       --text-color: #2c3e50;
     }
 
     body {
       font-family: 'Hind Siliguri', sans-serif;
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      padding: 40px 20px;
+      padding: 20px 10px; /* মোবাইলের জন্য প্যাডিং কমানো হয়েছে */
       margin: 0;
       color: var(--text-color);
+      -webkit-font-smoothing: antialiased;
     }
 
     .container {
       max-width: 800px;
       margin: auto;
       background: white;
-      padding: 40px;
+      padding: 30px 20px;
       border-radius: 15px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       position: relative;
+      box-sizing: border-box;
     }
 
     .header-logo {
@@ -42,7 +44,7 @@
 
     .header-logo h1 {
       color: var(--secondary-color);
-      font-size: 38px;
+      font-size: clamp(24px, 8vw, 38px); /* স্ক্রিন অনুযায়ী ফন্ট ছোট-বড় হবে */
       margin: 0;
     }
 
@@ -50,6 +52,7 @@
       text-align: right;
       font-size: 14px;
       color: #7f8c8d;
+      margin-bottom: 10px;
     }
 
     label {
@@ -63,15 +66,16 @@
       width: 100%;
       padding: 12px;
       margin-top: 8px;
-      font-size: 15px;
+      font-size: 16px; /* মোবাইলে অটো-জুম এড়াতে ১৬ পিক্সেল */
       border-radius: 8px;
       border: 1px solid #ddd;
       box-sizing: border-box;
+      font-family: inherit;
     }
 
     .summary {
       background: #f9f9f9;
-      padding: 15px;
+      padding: 10px 15px;
       margin-top: 20px;
       border-radius: 10px;
       border: 1px solid #eee;
@@ -81,40 +85,54 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 0;
+      padding: 6px 0; /* গ্যাপ কমানো হয়েছে */
       border-bottom: 1px solid #eee;
+      gap: 10px;
     }
 
-    /* --- আপডেট করা বাটন স্টাইল --- */
+    .item-row span {
+      flex: 1;
+      font-size: 14px;
+    }
+
     .quantity-buttons {
       display: flex;
       gap: 5px;
     }
 
     .quantity-buttons button {
-      width: 32px;
-      height: 32px;
+      width: 28px; /* টাচ করার সুবিধার জন্য সামান্য বড় */
+      height: 28px;
       border-radius: 6px;
       border: none;
-      background-color: var(--btn-blue); /* Peter River Color */
+      background-color: var(--btn-blue);
       color: white;
       cursor: pointer;
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s ease, transform 0.1s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: background 0.2s;
     }
 
-    .quantity-buttons button:hover {
-      background-color: var(--secondary-color); /* Belize Hole Color */
-      transform: translateY(-1px);
+    /* মোবাইল ও পিসির জন্য ইনপুট গ্রিড অ্যাডজাস্টমেন্ট */
+    .input-grid {
+      display: grid; 
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 10px;
     }
 
-    .quantity-buttons button:active {
-      transform: translateY(0);
+    @media (max-width: 600px) {
+      .input-grid {
+        grid-template-columns: 1fr; /* মোবাইলে একটির নিচে একটি আসবে */
+      }
+      .btn-group {
+        flex-direction: column; /* বাটনগুলো নিচে নিচে আসবে */
+      }
+      .container {
+        padding: 20px 15px;
+      }
     }
 
     .totals-box {
@@ -128,7 +146,8 @@
     .totals-box p {
       display: flex;
       justify-content: space-between;
-      margin: 5px 0;
+      margin: 8px 0;
+      font-size: 15px;
     }
 
     .btn-group {
@@ -139,14 +158,14 @@
 
     .btn-main {
       flex: 1;
-      padding: 12px;
+      padding: 14px;
       border-radius: 8px;
       border: none;
       font-weight: 600;
       cursor: pointer;
       color: white;
-      transition: 0.3s;
       font-size: 16px;
+      text-align: center;
     }
 
     .btn-submit { background: var(--primary-color); }
@@ -154,35 +173,34 @@
 
     .footer-actions {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 10px;
       margin-top: 20px;
     }
 
     .footer-actions button { 
       background: var(--secondary-color); 
-      padding: 12px;
+      padding: 12px 5px;
       border-radius: 8px;
       border: none;
       color: white;
       font-weight: 600;
       cursor: pointer;
+      font-size: 14px;
     }
 
     #invoiceText {
-      height: 120px;
+      height: 200px;
       margin-top: 20px;
       background: #fcfcfc;
+      resize: none;
     }
 
-    /* Print/PDF Optimization */
     @media print {
       @page { size: A4; margin: 1cm; }
       body { background: white; padding: 0; }
       .container { box-shadow: none; border: none; width: 100%; max-width: 100%; padding: 0; }
-      .no-print, #productSelect, .quantity-buttons, label, input, .btn-group, .footer-actions, #invoiceText {
-        display: none !important;
-      }
+      .no-print { display: none !important; }
       .summary, .totals-box { border: 1px solid #eee; }
       #finalSummary { display: block !important; }
     }
@@ -194,7 +212,7 @@
   <div class="container" id="printableArea">
     <div class="header-logo">
       <h1>মাটি ও মৃৎশিল্প</h1>
-      <p style="margin: 5px 0; color: #666;">প্রাকৃতিক ও শৈল্পিক মৃৎপণ্যের বিশ্বস্ত প্রতিষ্ঠান</p>
+      <p style="margin: 5px 0; color: #666; font-size: 14px;">প্রাকৃতিক ও শৈল্পিক মৃৎপণ্যের বিশ্বস্ত প্রতিষ্ঠান</p>
     </div>
 
     <div class="date-info">তারিখ: <span id="currentDate"></span></div>
@@ -242,10 +260,10 @@
     </div>
 
     <div id="selectedItems" class="summary">
-      <p style="text-align:center; color:#999;">কোন পণ্য যোগ করা হয়নি</p>
+      <p style="text-align:center; color:#999;">কোন পণ্য যোগ করা হয়নি</p>
     </div>
 
-    <div class="no-print" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+    <div class="no-print input-grid">
       <div>
         <label>🚚 ডেলিভারি চার্জ</label>
         <input type="number" id="deliveryCharge" placeholder="৳">
@@ -261,7 +279,7 @@
     </div>
 
     <div class="btn-group no-print">
-      <button class="btn-main btn-submit" onclick="submitInvoice()">ইনভয়েজ তৈরি করুন</button>
+      <button class="btn-main btn-submit" onclick="submitInvoice()">ইনভয়েজ তৈরি করুন</button>
       <button class="btn-main btn-clear" onclick="clearAll()">মুছে ফেলুন</button>
     </div>
 
@@ -269,11 +287,11 @@
       <p>পণ্যের মোট মূল্য: <span id="sumProductTotal">৳ ০</span></p>
       <p>ডেলিভারি চার্জ: <span id="sumDelivery">৳ ০</span></p>
       <p id="discountRow" style="color: #e74c3c;">ডিসকাউন্ট: <span id="sumDiscount">৳ ০</span></p>
-      <p style="font-weight:bold; font-size: 1.2em; border-top: 1px solid #ddd; padding-top: 10px;">
+      <p style="font-weight:bold; font-size: 1.1em; border-top: 1px solid #ddd; padding-top: 10px;">
         সর্বমোট বিল: <span id="sumFinalTotal">৳ ০</span>
       </p>
       <p style="color: var(--accent-color); font-weight: bold;">পরিশোধিত: <span id="sumPaid">৳ ০</span></p>
-      <p style="color: #e74c3c; font-weight: bold;">বকেয়া (COD): <span id="sumDue">৳ ০</span></p>
+      <p style="color: #e74c3c; font-weight: bold;">বকেয়া (COD): <span id="sumDue">৳ ০</span></p>
     </div>
 
     <textarea id="invoiceText" class="no-print" readonly placeholder="কপি করার টেক্সট এখানে আসবে..."></textarea>
@@ -281,7 +299,7 @@
     <div class="footer-actions no-print">
       <button onclick="copyText()">📋 কপি টেক্সট</button>
       <button onclick="downloadPDF()">📄 PDF ডাউনলোড</button>
-      <button onclick="window.print()">🖨️ প্রিন্ট ইনভয়েজ</button>
+      <button onclick="window.print()">🖨️ প্রিন্ট ইনভয়েজ</button>
     </div>
   </div>
 
@@ -317,18 +335,18 @@
     function renderItems() {
       const container = document.getElementById("selectedItems");
       if (selectedItems.length === 0) {
-        container.innerHTML = '<p style="text-align:center; color:#999;">কোন পণ্য যোগ করা হয়নি</p>';
+        container.innerHTML = '<p style="text-align:center; color:#999;">কোন পণ্য যোগ করা হয়নি</p>';
         return;
       }
       let html = "";
       selectedItems.forEach((item, i) => {
         html += `<div class="item-row">
-          <span><strong>${item.name}</strong> (${item.price}৳ x ${item.quantity})</span>
-          <div style="display:flex; align-items:center; gap:15px;">
-            <strong style="color:var(--text-color); font-size: 16px;">৳${item.price * item.quantity}</strong>
+          <span><strong>${item.name}</strong><br><small>${item.price}৳ x ${item.quantity}</small></span>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <strong style="color:var(--text-color); font-size: 15px;">৳${item.price * item.quantity}</strong>
             <div class="quantity-buttons no-print">
-              <button onclick="changeQty(${i}, 1)" title="পরিমাণ বাড়ান">+</button>
-              <button onclick="changeQty(${i}, -1)" title="পরিমাণ কমান">-</button>
+              <button onclick="changeQty(${i}, 1)">+</button>
+              <button onclick="changeQty(${i}, -1)">-</button>
             </div>
           </div>
         </div>`;
@@ -364,31 +382,33 @@
       text += `ডেলিভারি চার্জ: ৳${delivery}\n`;
       if(discount > 0) text += `ডিসকাউন্ট: ৳${discount}\n`;
       text += `সর্বমোট বিল: ৳${totalBill}\n`;
-      text += `অগ্রিম পেমেন্ট: ৳${paid}\n`;
-      text += `বকেয়া (COD): ৳${due}\n`;
       
       if (paid > 0) {
-        text += `\n${paid} টাকা বিকাশ করে অর্ডার কনফার্ম করবেন। বাকি ${due} টাকা পণ্য হাতে পেয়ে ডেলিভারি ম্যানকে দেবেন।\nবিঃদ্রঃ আমাদের সম্পুর্ণ ক্যাশ অন ডেলিভারির কোন সিষ্টেম নেই।`;
+        text += `\n${paid} টাকা বিকাশ করে অর্ডার কনফার্ম করবেন। বাকি ${due} টাকা পণ্য হাতে পেয়ে ডেলিভারি ম্যানকে দেবেন।\nবিঃদ্রঃ আমাদের সম্পুর্ণ ক্যাশ-অন ডেলিভারি সিষ্টেম নেই।`;
       }
       document.getElementById("invoiceText").value = text;
+      
+      // মোবাইলে ইনভয়েজ তৈরির পর অটোমেটিক রেজাল্ট সেকশনে স্ক্রল করবে
+      document.getElementById("finalSummary").scrollIntoView({ behavior: 'smooth' });
     }
 
     function copyText() {
       const tx = document.getElementById("invoiceText");
-      if(!tx.value) return alert("আগে ইনভয়েজ তৈরি করুন");
+      if(!tx.value) return alert("আগে ইনভয়েজ তৈরি করুন");
       tx.select();
+      tx.setSelectionRange(0, 99999); // মোবাইল ফোনের জন্য
       document.execCommand("copy");
-      alert("টেক্সট কপি হয়েছে!");
+      alert("টেক্সট কপি হয়েছে!");
     }
 
     function downloadPDF() {
       submitInvoice();
       const element = document.getElementById("printableArea");
       const opt = {
-        margin: 0.5,
+        margin: 0.3,
         filename: 'Invoice_Mritsilpo.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
+        html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
       };
       html2pdf().set(opt).from(element).save();
@@ -408,4 +428,3 @@
   </script>
 </body>
 </html>
-
