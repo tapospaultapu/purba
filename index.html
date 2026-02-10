@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>মাটি ও মৃৎশিল্প ইনভয়েজ</title>
+  <title>মাটি ও মৃৎশিল্প ইনভয়েজ</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap');
 
@@ -18,7 +18,7 @@
     body {
       font-family: 'Hind Siliguri', sans-serif;
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      padding: 20px 10px; /* মোবাইলের জন্য প্যাডিং কমানো হয়েছে */
+      padding: 20px 10px;
       margin: 0;
       color: var(--text-color);
       -webkit-font-smoothing: antialiased;
@@ -44,7 +44,7 @@
 
     .header-logo h1 {
       color: var(--secondary-color);
-      font-size: clamp(24px, 8vw, 38px); /* স্ক্রিন অনুযায়ী ফন্ট ছোট-বড় হবে */
+      font-size: clamp(24px, 8vw, 38px);
       margin: 0;
     }
 
@@ -62,11 +62,71 @@
       color: var(--secondary-color);
     }
 
-    select, input, textarea {
+    /* মাল্টি-সিলেক্ট ড্রপডাউন স্টাইল */
+    .multiselect-container {
+      position: relative;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .select-box {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      background: #fff;
+      cursor: pointer;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .overSelect {
+      position: absolute;
+      left: 0; right: 0; top: 0; bottom: 0;
+    }
+
+    #checkboxes {
+      display: none;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      max-height: 250px;
+      overflow-y: auto;
+      background-color: #fff;
+      position: absolute;
+      width: 100%;
+      z-index: 100;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    #checkboxes label {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      margin: 0;
+      font-weight: 400;
+      color: var(--text-color);
+      border-bottom: 1px solid #f1f1f1;
+      cursor: pointer;
+    }
+
+    #checkboxes label:hover {
+      background-color: #f9f9f9;
+    }
+
+    #checkboxes input {
+      width: auto;
+      margin-right: 10px;
+      margin-top: 0;
+    }
+
+    input, textarea {
       width: 100%;
       padding: 12px;
       margin-top: 8px;
-      font-size: 16px; /* মোবাইলে অটো-জুম এড়াতে ১৬ পিক্সেল */
+      font-size: 16px;
       border-radius: 8px;
       border: 1px solid #ddd;
       box-sizing: border-box;
@@ -85,7 +145,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 6px 0; /* গ্যাপ কমানো হয়েছে */
+      padding: 6px 0;
       border-bottom: 1px solid #eee;
       gap: 10px;
     }
@@ -101,7 +161,7 @@
     }
 
     .quantity-buttons button {
-      width: 28px; /* টাচ করার সুবিধার জন্য সামান্য বড় */
+      width: 28px;
       height: 28px;
       border-radius: 6px;
       border: none;
@@ -116,7 +176,6 @@
       transition: background 0.2s;
     }
 
-    /* মোবাইল ও পিসির জন্য ইনপুট গ্রিড অ্যাডজাস্টমেন্ট */
     .input-grid {
       display: grid; 
       grid-template-columns: repeat(3, 1fr); 
@@ -124,15 +183,9 @@
     }
 
     @media (max-width: 600px) {
-      .input-grid {
-        grid-template-columns: 1fr; /* মোবাইলে একটির নিচে একটি আসবে */
-      }
-      .btn-group {
-        flex-direction: column; /* বাটনগুলো নিচে নিচে আসবে */
-      }
-      .container {
-        padding: 20px 15px;
-      }
+      .input-grid { grid-template-columns: 1fr; }
+      .btn-group { flex-direction: column; }
+      .container { padding: 20px 15px; }
     }
 
     .totals-box {
@@ -218,45 +271,50 @@
     <div class="date-info">তারিখ: <span id="currentDate"></span></div>
 
     <div class="no-print">
-      <label>🛒 পণ্য সিলেক্ট করুন</label>
-      <select id="productSelect" onchange="addProduct()">
-        <option value="">-- নির্বাচন করুন --</option>
-        <option value="380">বড় তরকারি পাতিল ঢাকনা সহ - ৩৮০ টাকা</option>
-        <option value="330">🔴 বড় তরকারি পাতিল (ঢাকনা ছাড়া) - ৩৩০ টাকা</option>
-        <option value="330">ছোট তরকারি পাতিল ঢাকনা সহ - ৩৩০ টাকা</option>
-        <option value="280">🔴 ছোট তরকারি পাতিল (ঢাকনা ছাড়া) - ২৮০ টাকা</option>
-        <option value="370">বড় কড়াই ঢাকনা সহ - ৩৭০ টাকা</option>
-        <option value="320">🔴 বড় কড়াই (ঢাকনা ছাড়া) - ৩২০ টাকা</option>
-        <option value="270">ছোট কড়াই ঢাকনা সহ - ২৭০ টাকা</option>
-        <option value="220">🔴 ছোট কড়াই (ঢাকনা ছাড়া) - ২২০ টাকা</option>
-        <option value="370">বড় ভাতের পাতিল ঢাকনা সহ - ৩৭০ টাকা</option>
-        <option value="320">🔴 বড় ভাতের পাতিল (ঢাকনা ছাড়া) - ৩২০ টাকা</option>
-        <option value="320">মাঝারি ভাতের পাতিল ঢাকনা সহ - ৩২০ টাকা</option>
-        <option value="270">🔴 মাঝারি ভাতের পাতিল (ঢাকনা ছাড়া) - ২৭০ টাকা</option>
-        <option value="270">ছোট ভাতের পাতিল ঢাকনা সহ - ২৭০ টাকা</option>
-        <option value="220">🔴 ছোট ভাতের পাতিল (ঢাকনা ছাড়া) - ২২০ টাকা</option>
-        <option value="250">চায়ের পাতিল ঢাকনা সহ - ২৫০ টাকা</option>
-        <option value="330">দুধ/ডাল পাতিল ঢাকনা সহ - ৩৩০ টাকা</option>
-        <option value="280">🔴 দুধ/ডাল পাতিল (ঢাকনা ছাড়া) - ২৮০ টাকা</option>
-        <option value="370">স্টিমার / পিঠা ভাপে সেদ্ধ করার পাতিল ঢাকনা সহ - ৩৭০ টাকা</option>
-        <option value="320">🔴স্টিমার / পিঠা ভাপে সেদ্ধ করার পাতিল (ঢাকনা ছাড়া) - ৩২০ টাকা</option>
-        <option value="370">ভাপা পিঠার পাতিল ঢাকনা সহ - ৩৭০ টাকা</option>
-        <option value="420">ভাপা পিঠার পাতিল পিঠার বাটি সহ - ৪২০ টাকা</option>
-        <option value="220">চিতই পিঠার খোলা ঢাকনা সহ - ২২০ টাকা</option>
-        <option value="270">খোলজা পিঠার খোলা ঢাকনা সহ - ২৭০ টাকা</option>
-        <option value="370">৭ খোপের চিতই পিঠার ছাঁচ ঢাকনা সহ - ৩৭০ টাকা</option>
-        <option value="320">৫ খোপের চিতই পিঠার ছাঁচ ঢাকনা সহ - ৩২০ টাকা</option>
-        <option value="250">তাওয়া - ২৫০ টাকা</option>
-        <option value="110">জলকান্দা (পাতিল বসানোর পাত্র) - ১১০ টাকা</option>
-        <option value="250">কয়েলদানি - ২৫০ টাকা</option>
-        <option value="120">বাটি - ১২০ টাকা</option>
-        <option value="220">প্লেট  - ২২০ টাকা</option>
-        <option value="150">গোল গ্লাস - ১৫০ টাকা</option>
-        <option value="130">নরমাল গ্লাস - ১৩০ টাকা</option>
-        <option value="1200">১৪ লিটার কলসি (ট্যাপ, ঢাকনা ও জলকান্দা সহ) - ১২০০ টাকা</option>
-        <option value="850">৭ লিটার কলসি (ট্যাপ, ঢাকনা ও জলকান্দা সহ) - ৮৫০ টাকা</option>
-        <option value="750">৫ লিটার কলসি (ট্যাপ, ঢাকনা ও জলকান্দা সহ) - ৭৫০ টাকা</option>
-      </select>
+      <label>🛒 পণ্য সিলেক্ট করুন (একাধিক সম্ভব)</label>
+      <div class="multiselect-container">
+        <div class="select-box" onclick="toggleCheckboxes()">
+          <span id="selectPlaceholder">-- পণ্য নির্বাচন করুন --</span>
+          <span style="font-size: 12px;">▼</span>
+        </div>
+        <div id="checkboxes">
+          <label><input type="checkbox" value="380" data-name="বড় তরকারি পাতিল ঢাকনা সহ"> বড় তরকারি পাতিল ঢাকনা সহ - ৩৮০ টাকা</label>
+          <label><input type="checkbox" value="330" data-name="বড় তরকারি পাতিল (ঢাকনা ছাড়া)"> 🔴 বড় তরকারি পাতিল (ঢাকনা ছাড়া) - ৩৩০ টাকা</label>
+          <label><input type="checkbox" value="330" data-name="ছোট তরকারি পাতিল ঢাকনা সহ"> ছোট তরকারি পাতিল ঢাকনা সহ - ৩৩০ টাকা</label>
+          <label><input type="checkbox" value="280" data-name="ছোট তরকারি পাতিল (ঢাকনা ছাড়া)"> 🔴 ছোট তরকারি পাতিল (ঢাকনা ছাড়া) - ২৮০ টাকা</label>
+          <label><input type="checkbox" value="370" data-name="বড় কড়াই ঢাকনা সহ"> বড় কড়াই ঢাকনা সহ - ৩৭০ টাকা</label>
+          <label><input type="checkbox" value="320" data-name="বড় কড়াই (ঢাকনা ছাড়া)"> 🔴 বড় কড়াই (ঢাকনা ছাড়া) - ৩২০ টাকা</label>
+          <label><input type="checkbox" value="270" data-name="ছোট কড়াই ঢাকনা সহ"> ছোট কড়াই ঢাকনা সহ - ২৭০ টাকা</label>
+          <label><input type="checkbox" value="220" data-name="ছোট কড়াই (ঢাকনা ছাড়া)"> 🔴 ছোট কড়াই (ঢাকনা ছাড়া) - ২২০ টাকা</label>
+          <label><input type="checkbox" value="370" data-name="বড় ভাতের পাতিল ঢাকনা সহ"> বড় ভাতের পাতিল ঢাকনা সহ - ৩৭০ টাকা</label>
+          <label><input type="checkbox" value="320" data-name="বড় ভাতের পাতিল (ঢাকনা ছাড়া)"> 🔴 বড় ভাতের পাতিল (ঢাকনা ছাড়া) - ৩২০ টাকা</label>
+          <label><input type="checkbox" value="320" data-name="মাঝারি ভাতের পাতিল ঢাকনা সহ"> মাঝারি ভাতের পাতিল ঢাকনা সহ - ৩২০ টাকা</label>
+          <label><input type="checkbox" value="270" data-name="মাঝারি ভাতের পাতিল (ঢাকনা ছাড়া)"> 🔴 মাঝারি ভাতের পাতিল (ঢাকনা ছাড়া) - ২৭০ টাকা</label>
+          <label><input type="checkbox" value="270" data-name="ছোট ভাতের পাতিল ঢাকনা সহ"> ছোট ভাতের পাতিল ঢাকনা সহ - ২৭০ টাকা</label>
+          <label><input type="checkbox" value="220" data-name="ছোট ভাতের পাতিল (ঢাকনা ছাড়া)"> 🔴 ছোট ভাতের পাতিল (ঢাকনা ছাড়া) - ২২০ টাকা</label>
+          <label><input type="checkbox" value="250" data-name="চায়ের পাতিল ঢাকনা সহ"> চায়ের পাতিল ঢাকনা সহ - ২৫০ টাকা</label>
+          <label><input type="checkbox" value="330" data-name="দুধ/ডাল পাতিল ঢাকনা সহ"> দুধ/ডাল পাতিল ঢাকনা সহ - ৩৩০ টাকা</label>
+          <label><input type="checkbox" value="280" data-name="দুধ/ডাল পাতিল (ঢাকনা ছাড়া)"> 🔴 দুধ/ডাল পাতিল (ঢাকনা ছাড়া) - ২৮০ টাকা</label>
+          <label><input type="checkbox" value="370" data-name="স্টিমার পাতিল ঢাকনা সহ"> স্টিমার / পিঠা ভাপে সেদ্ধ করার পাতিল ঢাকনা সহ - ৩৭০ টাকা</label>
+          <label><input type="checkbox" value="320" data-name="স্টিমার পাতিল (ঢাকনা ছাড়া)"> 🔴স্টিমার / পিঠা ভাপে সেদ্ধ করার পাতিল (ঢাকনা ছাড়া) - ৩২০ টাকা</label>
+          <label><input type="checkbox" value="370" data-name="ভাপা পিঠার পাতিল ঢাকনা সহ"> ভাপা পিঠার পাতিল ঢাকনা সহ - ৩৭০ টাকা</label>
+          <label><input type="checkbox" value="420" data-name="ভাপা পিঠার পাতিল বাটি সহ"> ভাপা পিঠার পাতিল পিঠার বাটি সহ - ৪২০ টাকা</label>
+          <label><input type="checkbox" value="220" data-name="চিতই পিঠার খোলা ঢাকনা সহ"> চিতই পিঠার খোলা ঢাকনা সহ - ২২০ টাকা</label>
+          <label><input type="checkbox" value="270" data-name="খোলজা পিঠার খোলা ঢাকনা সহ"> খোলজা পিঠার খোলা ঢাকনা সহ - ২৭০ টাকা</label>
+          <label><input type="checkbox" value="370" data-name="৭ খোপের চিতই পিঠার ছাঁচ"> ৭ খোপের চিতই পিঠার ছাঁচ ঢাকনা সহ - ৩৭০ টাকা</label>
+          <label><input type="checkbox" value="320" data-name="৫ খোপের চিতই পিঠার ছাঁচ"> ৫ খোপের চিতই পিঠার ছাঁচ ঢাকনা সহ - ৩২০ টাকা</label>
+          <label><input type="checkbox" value="250" data-name="তাওয়া"> তাওয়া - ২৫০ টাকা</label>
+          <label><input type="checkbox" value="110" data-name="জলকান্দা"> জলকান্দা (পাতিল বসানোর পাত্র) - ১১০ টাকা</label>
+          <label><input type="checkbox" value="250" data-name="কয়েলদানি"> কয়েলদানি - ২৫০ টাকা</label>
+          <label><input type="checkbox" value="120" data-name="বাটি"> বাটি - ১২০ টাকা</label>
+          <label><input type="checkbox" value="220" data-name="প্লেট"> প্লেট - ২২০ টাকা</label>
+          <label><input type="checkbox" value="150" data-name="গোল গ্লাস"> গোল গ্লাস - ১৫০ টাকা</label>
+          <label><input type="checkbox" value="130" data-name="নরমাল গ্লাস"> নরমাল গ্লাস - ১৩০ টাকা</label>
+          <label><input type="checkbox" value="1200" data-name="১৪ লিটার কলসি (সেট)"> ১৪ লিটার কলসি (ট্যাপ, ঢাকনা ও জলকান্দা সহ) - ১২০০ টাকা</label>
+          <label><input type="checkbox" value="850" data-name="৭ লিটার কলসি (সেট)"> ৭ লিটার কলসি (ট্যাপ, ঢাকনা ও জলকান্দা সহ) - ৮৫০ টাকা</label>
+          <label><input type="checkbox" value="750" data-name="৫ লিটার কলসি (সেট)"> ৫ লিটার কলসি (ট্যাপ, ঢাকনা ও জলকান্দা সহ) - ৭৫০ টাকা</label>
+        </div>
+      </div>
     </div>
 
     <div id="selectedItems" class="summary">
@@ -304,32 +362,67 @@
   </div>
 
   <script>
-    const selectedItems = [];
+    let selectedItems = [];
+    let expanded = false;
+
+    function toggleCheckboxes() {
+      const checkboxes = document.getElementById("checkboxes");
+      if (!expanded) {
+        checkboxes.style.display = "block";
+        expanded = true;
+      } else {
+        checkboxes.style.display = "none";
+        expanded = false;
+      }
+    }
+
+    // ড্রপডাউনের বাইরে ক্লিক করলে সেটি বন্ধ হয়ে যাবে
+    window.addEventListener('click', function(e){   
+      if (!document.querySelector('.multiselect-container').contains(e.target)){
+        document.getElementById("checkboxes").style.display = "none";
+        expanded = false;
+      }
+    });
+
+    // চেকবক্স হ্যান্ডলিং
+    document.querySelectorAll('#checkboxes input').forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        const price = parseInt(this.value);
+        const name = this.getAttribute('data-name');
+        
+        if (this.checked) {
+          selectedItems.push({ name: name, price: price, quantity: 1 });
+        } else {
+          selectedItems = selectedItems.filter(item => item.name !== name);
+        }
+        renderItems();
+        updatePlaceholder();
+      });
+    });
+
+    function updatePlaceholder() {
+      const placeholder = document.getElementById("selectPlaceholder");
+      const count = selectedItems.length;
+      placeholder.innerText = count > 0 ? `${count}টি পণ্য সিলেক্ট করা হয়েছে` : "-- পণ্য নির্বাচন করুন --";
+    }
 
     function updateDate() {
       const today = new Date();
       document.getElementById("currentDate").textContent = today.toLocaleDateString("bn-BD", { year: "numeric", month: "long", day: "numeric" });
     }
 
-    function addProduct() {
-      const select = document.getElementById("productSelect");
-      const price = parseInt(select.value);
-      if (!price) return;
-      const text = select.options[select.selectedIndex].text;
-      const itemName = text.split(' - ')[0];
-
-      const existing = selectedItems.find(i => i.name === itemName);
-      if (existing) existing.quantity++;
-      else selectedItems.push({ name: itemName, price: price, quantity: 1 });
-
-      renderItems();
-      select.selectedIndex = 0;
-    }
-
     function changeQty(index, delta) {
       selectedItems[index].quantity += delta;
-      if (selectedItems[index].quantity <= 0) selectedItems.splice(index, 1);
+      if (selectedItems[index].quantity <= 0) {
+        // আনচেক দ করসপন্ডিং বক্স
+        const itemName = selectedItems[index].name;
+        document.querySelectorAll('#checkboxes input').forEach(cb => {
+          if(cb.getAttribute('data-name') === itemName) cb.checked = false;
+        });
+        selectedItems.splice(index, 1);
+      }
       renderItems();
+      updatePlaceholder();
     }
 
     function renderItems() {
@@ -387,8 +480,6 @@
         text += `\n${paid} টাকা বিকাশ করে অর্ডার কনফার্ম করবেন। বাকি ${due} টাকা পণ্য হাতে পেয়ে ডেলিভারি ম্যানকে দেবেন।\nবিঃদ্রঃ আমাদের সম্পুর্ণ ক্যাশ-অন ডেলিভারি সিষ্টেম নেই।`;
       }
       document.getElementById("invoiceText").value = text;
-      
-      // মোবাইলে ইনভয়েজ তৈরির পর অটোমেটিক রেজাল্ট সেকশনে স্ক্রল করবে
       document.getElementById("finalSummary").scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -396,7 +487,7 @@
       const tx = document.getElementById("invoiceText");
       if(!tx.value) return alert("আগে ইনভয়েজ তৈরি করুন");
       tx.select();
-      tx.setSelectionRange(0, 99999); // মোবাইল ফোনের জন্য
+      tx.setSelectionRange(0, 99999);
       document.execCommand("copy");
       alert("টেক্সট কপি হয়েছে!");
     }
@@ -416,10 +507,12 @@
 
     function clearAll() {
       if(confirm("আপনি কি নিশ্চিত যে সবকিছু মুছে ফেলতে চান?")) {
-        selectedItems.length = 0;
+        selectedItems = [];
+        document.querySelectorAll('#checkboxes input').forEach(cb => cb.checked = false);
         document.querySelectorAll('input').forEach(i => i.value = '');
         document.getElementById("invoiceText").value = '';
         document.getElementById("finalSummary").style.display = 'none';
+        updatePlaceholder();
         renderItems();
       }
     }
