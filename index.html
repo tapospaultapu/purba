@@ -7,13 +7,6 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap');
 
-    /* মোবাইল রিফ্রেশ বন্ধ করার প্রধান কোড */
-    html, body {
-      overscroll-behavior-y: contain; /* এটি ড্র্যাগ-টু-রিফ্রেশ বন্ধ করবে */
-      height: 100%;
-      overflow-x: hidden;
-    }
-
     :root {
       --primary-color: #1ABC9C;
       --secondary-color: #2980B9;
@@ -69,6 +62,7 @@
       color: var(--secondary-color);
     }
 
+    /* মাল্টি-সিলেক্ট ড্রপডাউন স্টাইল */
     .multiselect-container {
       position: relative;
       width: 100%;
@@ -89,23 +83,40 @@
       align-items: center;
     }
 
+    .overSelect {
+      position: absolute;
+      left: 0; right: 0; top: 0; bottom: 0;
+    }
+
     #checkboxes {
       display: none;
       border: 1px solid #ddd;
       border-radius: 8px;
-      max-height: 250px;
+      max-height: 600px; /* হাইট কিছুটা বাড়ানো হয়েছে ভালো ভিউর জন্য */
       overflow-y: auto;
       background-color: #fff;
       position: absolute;
-      width: 100%;
-      z-index: 100;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      /* আপডেট: ড্রপডাউনটি স্ক্রিনের ৮০% জুড়ে দেখানোর জন্য */
+      width: 80vw; 
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    /* বড় স্ক্রিনে যেন আবার খুব বেশি বড় না হয়ে যায় */
+    @media (min-width: 800px) {
+      #checkboxes {
+        width: 100%; 
+        left: 0;
+        transform: none;
+      }
     }
 
     #checkboxes label {
       display: flex;
       align-items: center;
-      padding: 10px;
+      padding: 12px;
       margin: 0;
       font-weight: 400;
       color: var(--text-color);
@@ -119,8 +130,9 @@
 
     #checkboxes input {
       width: auto;
-      margin-right: 10px;
+      margin-right: 15px;
       margin-top: 0;
+      transform: scale(1.2); /* চেকবক্স একটু বড় করা হয়েছে */
     }
 
     input, textarea {
@@ -272,7 +284,7 @@
     <div class="date-info">তারিখ: <span id="currentDate"></span></div>
 
     <div class="no-print">
-      <label>🛒 পণ্য সিলেক্ট করুন (একাধিক সম্ভব)</label>
+      <label>🛒 পণ্য সিলেক্ট করুন</label>
       <div class="multiselect-container">
         <div class="select-box" onclick="toggleCheckboxes()">
           <span id="selectPlaceholder">-- পণ্য নির্বাচন করুন --</span>
@@ -363,15 +375,6 @@
   </div>
 
   <script>
-    // মোবাইল ব্রাউজারে পুল-টু-রিফ্রেশ বন্ধ করার জন্য অতিরিক্ত জাভাস্ক্রিপ্ট
-    document.addEventListener('touchmove', function (event) {
-      if (event.touches.length > 1) return; // মাল্টি টাচ এলাউড
-      // যদি ইউজার একদম উপরে থাকে এবং নিচে নামার চেষ্টা করে
-      if (window.scrollY <= 0 && event.pageY > 0) {
-        // রিফ্রেশ প্রতিরোধ
-      }
-    }, { passive: false });
-
     let selectedItems = [];
     let expanded = false;
 
@@ -386,6 +389,7 @@
       }
     }
 
+    // ড্রপডাউনের বাইরে ক্লিক করলে সেটি বন্ধ হয়ে যাবে
     window.addEventListener('click', function(e){   
       if (!document.querySelector('.multiselect-container').contains(e.target)){
         document.getElementById("checkboxes").style.display = "none";
@@ -393,6 +397,7 @@
       }
     });
 
+    // চেকবক্স হ্যান্ডলিং
     document.querySelectorAll('#checkboxes input').forEach(checkbox => {
       checkbox.addEventListener('change', function() {
         const price = parseInt(this.value);
@@ -422,6 +427,7 @@
     function changeQty(index, delta) {
       selectedItems[index].quantity += delta;
       if (selectedItems[index].quantity <= 0) {
+        // আনচেক দ করসপন্ডিং বক্স
         const itemName = selectedItems[index].name;
         document.querySelectorAll('#checkboxes input').forEach(cb => {
           if(cb.getAttribute('data-name') === itemName) cb.checked = false;
